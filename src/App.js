@@ -2,6 +2,10 @@
 import './App.css';
 
 import React, { Component } from 'react'
+import ListItems from './ListItems';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+library.add(faTrash);
 
 class App extends Component {
   constructor(props) {
@@ -16,6 +20,7 @@ class App extends Component {
     }
     this.handleInput=this.handleInput.bind(this);
     this.addItem=this.addItem.bind(this);
+    this.deleteItem=this.deleteItem.bind(this);
 
   }
   handleInput(e){
@@ -31,6 +36,20 @@ class App extends Component {
     e.preventDefault();
     const newItem= this.state.currentItem;
     console.log(newItem);
+    if(newItem.text !==""){
+      const newItems=[...this.state.items, newItem];
+      this.setState ({
+        items: newItems,
+        currentItem:{
+          text: '',
+          key: ''
+      }})
+    }
+  }
+  deleteItem(key){
+    const filterItems=this.state.items.filter(item => item.key!==key);
+    this.setState({items:filterItems,})
+
   }
   render() {
     return (
@@ -41,6 +60,8 @@ class App extends Component {
       <button type="submit">Add</button>
       </form>
       </header>
+      <ListItems items={this.state.items}
+      deleteItem={this.deleteItem}> </ListItems>
     </div>
     )
   }
